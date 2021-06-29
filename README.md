@@ -9,9 +9,11 @@
 
 
 
-## Git 협업 방법
+## 브랜치 전략
 
 * 협업의 규모가 커지면 개인 스타일대로 git을 사용하는 것이 아닌 서로 규칙을 정해 사용해야 한다.
+
+* 브랜치 전략이 없다면 동료들이 만든 커밋이나 브랜치에 대해서는 알기가 어렵다
 
 * Centralized Workflow
 
@@ -41,29 +43,88 @@
 
 
 
-## Git Flow 브랜치 전략
+## GitHub Flow
 
-* 5가지 종류의 브랜치가 존재한다.
-* 항상 유지되는 메인 브랜치: master, developer
-* 일정 기간 동안만 유지되는 보조 브랜치: feature, release, hotfix
-* master: 제품으로 출시될 수 있는 브랜치
-* develop: 다음 출시 버전을 개발하는 브랜치
+* master 브랜치와 Pull Request를 활용한 단순한 브랜치 전략
+
+* 제품이 릴리즈되는 최신 버전인 master 브랜치 하나만 존재한다.
+
+	
+
+## GitHub-Flow 프로세스
+
+1. 기능 개발, 버그 픽스 등의 코드 개발이 필요할 경우 브랜치를 생성한다.
+
+	git-flow처럼 브랜치의 체계적인 분류가 없기 때문에 브랜치 이름에 의도를 잘 드러내야한다.
+
+2. 개발 과정중 커밋 메세지도 상세하게 적어준다.
+
+3. 개발이 완료되면 Pull Request를 생성한다.
+
+4. Pull Request에 대한 충분한 리뷰와 토의를 거친다.
+
+5.  리뷰가 끝나면 실제 서버에 배포한다.
+
+
+
+## GitHub-Flow 장점
+
+* 브랜치 전략이 단순하여 git을 처음 접하는 사람에게도 유용하다.
+* CI(지속적인 통합), CD(지속적인 배포)가 자연스럽게 이루어진다.
+
+
+
+## Git Flow
+
+* 5가지 종류의 브랜치를 이용해 운영하는 전략
+
+* 메인 브랜치: 프로젝트 진행동안 항상 유지되는 
+
+	* master: 제품으로 출시될 수 있는 브랜치
+
+	* developer:  다음 출시 버전을 개발하는 브랜치
+
+* 보조 브랜치: merge되면 사라지는 브랜치
+
 * feature: 다음 출시 버전을 위한 새로운 기능을 개발하는 브랜치, 개발자의 저장소에만 존재
+
 * release: 새로운 버전 출시 버전을 준비하는 브랜치, 출시를 위한 사소한 버그 수정이나 메타 데이터 준비를 허용
+
 * hotfix: 출시 버전에서 발생한 버그를 즉각 대응해야 하는 상황에서 필요
 
 
 
-## Git-Flow 전략 흐름
+## Git-Flow 개발 프로세스
 
-1. 처음에는 master와 develop 브랜치가 존재
-2. develop 브랜치에서는 상시로 버그를 수정한 커밋들이 추가된다.
-3. 새로운 기능 추가작업이 있는 경우 develop 브랜치에서 feature 브랜치를 생성, feature 브랜치는 언제나 develop 브랜치에서 부터 시작하게 된다.
-4. 기능 추가작업이 완료되면 feature 브랜치는 develop 브랜치로 merge
-5. develop에 이번 버전에 포함되는 모든 기능이 merge 되었다면 QA를 하기 위해 develop 브랜치에서부터 release 브랜치를 생성
-6. QA를 진행하면서 발생한 버그들은 release 브랜치에 수정된다.
-7. QA를 통과했다면 release 브랜치를 master와 develop 브랜치로 merge, release를 마무리하면 develop과 master가 같은 상태가 된다.
-8. master 브랜치에서 버전 태그를 추가
+1. 처음에는 master와 develop 브랜치가 존재, develop 브랜치는 master 브랜치에서 생성되었다.
+
+2. 개발자는 develop 브랜치로부터 본인이 개발할 기능을 위한 feature 브랜치를 만든다.
+
+3. feature 브랜치에서 기능을 만들다가 기능이 완성되면 develop 브랜치에 merge
+
+4. 이번 배포 버전의 기능을 develop 브랜치에 모두 merge 되었다면 QA를 위해 release 브랜치를 생성
+
+5. release 브랜치에서 QA 도중 오류가 발생하면 release 브랜치 내에서 수정을 한다.
+
+	QA가 끝났다면 master와 develop 브랜치에 merge
+
+6. master에서 버그가 발생하면 hotfix 브랜치를 만든다.
+
+	hotfix 브랜치에서 버그 픽스가 끝났다면 develop과 master 브랜치에 각각 merge한다.
+
+
+
+## Git-Flow 장점
+
+* master 브랜치에서 버전에 따라 관리할 수 있기 때문에 주기적으로 배포하는 서비스에 적합
+* 가장 유명한 전략인 만큼 많은 IDE가 지원한다.
+
+
+
+## Git-Flow vs Git-Hub Flow
+
+1. 한달이상의 긴 호흡으로 개발하여 주기적 배포, QA 및 hotfix를 수행할 수 있는 팀이면 git-flow가 적합
+2. 항상 릴리즈되어야 할 필요가 있는 서비스와 지속적으로 테스트하고 배포하는 팀이면 github-flow와 같은 간단한 work-flow가 적합
 
 
 
